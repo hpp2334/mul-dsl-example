@@ -1,0 +1,51 @@
+
+
+struct LazyColumnProps<T> {
+    items: [T],
+    @child
+    child: (T) -> widget
+}
+declare components LazyColumn(LazyColumnProps)
+
+struct RowProps {
+    @child
+    child: widget
+}
+
+declare components Row(RowProps)
+
+struct Fragment {
+    @child
+    child: widget
+}
+declare components Fragment(FragmentProps)
+
+struct TodoItem {
+    name: string,
+    completed: bool,
+}
+
+struct TodoTask {
+    items: [TodoItem],
+}
+
+event AddTask {
+    name: string,
+}
+
+components TaskWidget(TodoItem) {
+    Row {
+        Fragment {
+            Text(text = props.name)
+            Checkbox(checked = props.completed)
+        }
+    }
+}
+
+components TaskRoot(TodoTask) {
+    LazyColumn(
+        items = props.items
+    ) { item ->
+        TaskWidget(item)
+    }
+}
